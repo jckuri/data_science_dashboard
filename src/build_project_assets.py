@@ -136,9 +136,16 @@ for idx, e in enumerate(employee, start=1):
     for note in e["notes"]:
         _.append([idx, e["name"], note])
 
-notes = pd.DataFrame(_, columns=["employee_id", "employee_name", "note"]).assign(
-    event_date=np.random.choice(df.event_date, size=len(_), replace=True)
-)
+notes = pd.DataFrame(
+    _,
+    columns=[
+        "employee_id",
+        "employee_name",
+        "note"]).assign(
+            event_date=np.random.choice(
+                df.event_date,
+                size=len(_),
+                replace=True))
 
 
 df = df.merge(
@@ -162,11 +169,11 @@ employee = df.drop_duplicates("employee_id").assign(
     last_name=lambda x: x.employee_name.str.split().str[1],
 )[["employee_id", "first_name", "last_name", "team_id"]]
 
-events = df[
-    ["event_date", "employee_id", "team_id", "positive_events", "negative_events"]
-]
+events = df[["event_date", "employee_id", "team_id",
+             "positive_events", "negative_events"]]
 
-team = df.drop_duplicates("team_id")[["team_id", "team_name", "shift", "manager_name"]]
+team = df.drop_duplicates(
+    "team_id")[["team_id", "team_name", "shift", "manager_name"]]
 
 notes = df.dropna()[["employee_id", "team_id", "note", "event_date"]].rename(
     columns={"event_date": "note_date"}
@@ -190,7 +197,8 @@ with model_path.open("wb") as file:
     pickle.dump(model, file)
 
 
-db_path = cwd.parent / "python-package" / "employee_events" / "employee_events.db"
+db_path = cwd.parent / "python-package" / \
+    "employee_events" / "employee_events.db"
 
 connection = connect(db_path)
 

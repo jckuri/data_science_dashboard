@@ -361,9 +361,8 @@ class Header(BaseComponent):
         # return a fasthtml H1 objects
         # containing the model's name attribute
         # YOUR CODE HERE
-        title = (
-            "Employee Performance" if model.name == "employee" else "Team Performance"
-        )
+        title = ("Employee Performance" if model.name ==
+                 "employee" else "Team Performance")
         return H1(title)
 
 
@@ -399,7 +398,8 @@ class LineChart(MatplotlibViz):
         # YOUR CODE HERE
         # events_df = events_df.cumsum(axis = [1, 2])
         # pd.concat([df[['y0', 'y1']].cumsum(axis=1),df['y2']], axis=1)
-        sum_df = events_df[["positive_events", "negative_events"]].cumsum(axis=0)
+        sum_df = events_df[["positive_events",
+                            "negative_events"]].cumsum(axis=0)
         date_df = pandas.to_datetime(events_df["event_date"])
         events_df = pandas.concat([date_df, sum_df], axis=1)
 
