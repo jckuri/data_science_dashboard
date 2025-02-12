@@ -1,7 +1,56 @@
 
 # Software Engineering for Data Scientists 
 
-This repository contains starter code for the **Software Engineering for Data Scientists** final project. Please reference your course materials for documentation on this repository's structure and important files. Happy coding!
+# Data Science Dashboard
+
+As a data scientist at a manufacturing company, you are tasked with addressing management's concern about losing top employees to competitors. The data team has implemented a system where managers record employees' performance events in a database (employee_events). A machine learning model has been developed to predict the likelihood of employees being recruited. Your responsibility is to build a dashboard that:
+
+1. Monitors employee performance (individual or team).
+2. Displays the predicted likelihood of recruitment for an individual or team (average risk).
+
+### Installation Instructions
+
+Install Ubuntu:<br/>
+https://ubuntu.com/
+
+Install Conda:<br/>
+https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
+
+Create a Conda environment with the following command:
+
+```
+conda install -n SE4DS python=3.10
+conda activate SE4DS
+```
+
+Install all the required Python libraries:
+
+```
+python -m pip install -r requirements.txt 
+```
+
+Install our Python package `employee_events`:
+
+
+```
+python -m pip install python-package/
+```
+
+Run the tests:
+
+```
+pytest tests/test_employee_events.py 
+```
+
+Execute the server for the web application:
+
+```
+python report/dashboard.py
+```
+
+If done correctly, you should be able to visit this local website: http://0.0.0.0:5001
+
+![images/demo.png](images/demo.png)
 
 ### Repository Structure
 ```
