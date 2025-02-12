@@ -53,13 +53,78 @@
     # is returns containing the execution of
     # the sql query
     #### YOUR CODE HERE
-    def model_data(self, id):
+#    def model_data(self, id):
 
-        return f"""
-                    SELECT SUM(positive_events) positive_events
-                         , SUM(negative_events) negative_events
-                    FROM {self.name}
-                    JOIN employee_events
-                        USING({self.name}_id)
-                    WHERE {self.name}.{self.name}_id = {id}
-                """
+#        return f"""
+#                    SELECT SUM(positive_events) positive_events
+#                         , SUM(negative_events) negative_events
+#                    FROM {self.name}
+#                    JOIN employee_events
+#                        USING({self.name}_id)
+#                    WHERE {self.name}.{self.name}_id = {id}
+#                """
+
+
+
+# Import the QueryBase class
+from employee_events import QueryBase
+# from query_base import QueryBase
+
+
+# Define a subclass of QueryBase called Employee
+class Employee(QueryBase):
+
+
+    # Set the class attribute `name` to the string "employee"
+    name = "employee"
+
+
+    # Define a method called `names` that receives no arguments
+    # This method should return a list of tuples from an SQL execution
+    def names(self):
+        # Query 3: SQL query to select full name and id for all employees
+        query = f"""
+        SELECT CONCAT(first_name, ' ', last_name) AS full_name, employee_id
+        FROM {self.name};
+        """
+        df = self.qm.pandas_query(query)
+        return df.to_records(index = False)
+
+
+    # Define a method called `username` that receives an `id` argument
+    # This method should return a list of tuples from an SQL execution
+    def username(self, id):
+        # Query 4: SQL query to select full name for a specific employee by ID
+        query = f"""
+        SELECT CONCAT(first_name, ' ', last_name) AS full_name
+        FROM {self.name}
+        WHERE employee_id = {id};
+        """
+        df = self.qm.pandas_query(query)
+        if len(df) > 0: return df.iloc[0]['full_name']
+        return None
+
+
+    # Modify the method `model_data` to return a pandas DataFrame
+    def model_data(self, id):
+        # Query to generate data for machine learning model
+        query = f"""
+        SELECT SUM(positive_events) AS positive_events,
+               SUM(negative_events) AS negative_events
+        FROM {self.name}
+        JOIN employee_events
+            USING({self.name}_id)
+        WHERE {self.name}.{self.name}_id = {id};
+        """
+        return self.qm.pandas_query(query)
+
+
+def main():
+ e = Employee()
+ names = e.names()
+ print(names)
+ id = 2
+ print(f"employee_id={id}, username={e.username(id)}")
+ print(e.model_data(id))
+
+if __name__ == "__main__": main()

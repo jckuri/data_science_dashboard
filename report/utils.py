@@ -1,15 +1,20 @@
 import pickle
 from pathlib import Path
 
+
 # Using the Path object, create a `project_root` variable
 # set to the absolute path for the root of this project directory
 #### YOUR CODE HERE
+project_root = Path(__file__).resolve().parent.parent
+
  
 # Using the `project_root` variable
 # create a `model_path` variable
 # that points to the file `model.pkl`
 # inside the assets directory
 #### YOUR CODE HERE
+model_path = project_root / 'assets' / 'model.pkl'
+
 
 def load_model():
 
@@ -17,3 +22,12 @@ def load_model():
         model = pickle.load(file)
 
     return model
+
+
+def main():
+ print(f'project_root={project_root}')
+ print(f'model_path={model_path}')
+ print(f'load_model()={load_model()}')
+    
+
+if __name__ == "__main__": main()

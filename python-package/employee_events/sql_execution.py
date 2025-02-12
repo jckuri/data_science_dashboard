@@ -3,28 +3,38 @@ from pathlib import Path
 from functools import wraps
 import pandas as pd
 
+
 # Using pathlib, create a `db_path` variable
 # that points to the absolute path for the `employee_events.db` file
-#### YOUR CODE HERE
+db_path = Path(__file__).parent / "employee_events.db"
 
 
 # OPTION 1: MIXIN
 # Define a class called `QueryMixin`
 class QueryMixin:
-    
+
     # Define a method named `pandas_query`
-    # that receives an sql query as a string
-    # and returns the query's result
-    # as a pandas dataframe
-    #### YOUR CODE HERE
+    # that receives an SQL query as a string
+    # and returns the query's result as a pandas dataframe
+    def pandas_query(self, sql_query: str):
+        connection = connect(db_path)
+        try:
+            result = pd.read_sql_query(sql_query, connection)
+        finally:
+            connection.close()
+        return result
 
     # Define a method named `query`
-    # that receives an sql_query as a string
-    # and returns the query's result as
-    # a list of tuples. (You will need
-    # to use an sqlite3 cursor)
-    #### YOUR CODE HERE
-    
+    # that receives an SQL query as a string
+    # and returns the query's result as a list of tuples
+    def query(self, sql_query: str):
+        connection = connect(db_path)
+        cursor = connection.cursor()
+        try:
+            result = cursor.execute(sql_query).fetchall()
+        finally:
+            connection.close()
+        return result
 
  
  # Leave this code unchanged
@@ -44,3 +54,12 @@ def query(func):
         return result
     
     return run_query
+    
+    
+def main():
+ qm = QueryMixin()
+ df = qm.pandas_query("SELECT event_date, SUM(positive_events) AS positive_events, SUM(negative_events) AS negative_events FROM employee_events WHERE employee_id = {} GROUP BY event_date ORDER BY event_date;".format(2))
+ print(df)
+ 
+ 
+if __name__ == "__main__": main()

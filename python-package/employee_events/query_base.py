@@ -47,3 +47,73 @@
         # for the table name in the `name` class attribute
         # YOUR CODE HERE
 
+
+# Import necessary dependencies
+import pandas as pd
+#import sql_execution
+from employee_events import QueryMixin
+
+
+# Define the QueryBase class
+class QueryBase:
+
+    # Create a class attribute called `name`
+    name = ""
+    
+    def __init__(self):
+        # self.qm = sql_execution.QueryMixin()
+        self.qm = QueryMixin()
+    
+    # Define a `names` method that receives no arguments
+    def names(self):
+        # Return an empty list
+        return []
+    
+    # Define an `event_counts` method
+    def event_counts(self, id):
+        if self.name == "employee":
+            id_field = "employee_id"
+        elif self.name == "team":
+            id_field = "team_id"
+        else: 
+            return None
+        query = f"""
+        SELECT 
+            event_date,
+            SUM(positive_events) AS positive_events,
+            SUM(negative_events) AS negative_events
+        FROM employee_events
+        WHERE {id_field} = {id}
+        GROUP BY event_date
+        ORDER BY event_date;
+        """
+        return self.qm.pandas_query(query)
+    
+    # Define a `notes` method
+    def notes(self, id):
+        if self.name == "employee":
+            id_field = "employee_id"
+        elif self.name == "team":
+            id_field = "team_id"
+        else: 
+            return None
+        query = f"""
+        SELECT 
+            note_date,
+            note
+        FROM notes
+        WHERE {id_field} = {id};
+        """
+        return self.qm.pandas_query(query)
+
+def main():
+ qb = QueryBase()
+ # qb.name = "employee"
+ qb.name = "team"
+ df = qb.event_counts(1)
+ print(df)
+ print("Hello world.")
+ df = qb.notes(1)
+ print(df)
+ 
+if __name__ == "__main__": main()
