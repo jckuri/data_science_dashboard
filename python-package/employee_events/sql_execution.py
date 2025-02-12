@@ -12,7 +12,6 @@ db_path = Path(__file__).parent / "employee_events.db"
 # OPTION 1: MIXIN
 # Define a class called `QueryMixin`
 class QueryMixin:
-
     # Define a method named `pandas_query`
     # that receives an SQL query as a string
     # and returns the query's result as a pandas dataframe
@@ -36,8 +35,8 @@ class QueryMixin:
             connection.close()
         return result
 
- 
- # Leave this code unchanged
+
+# Leave this code unchanged
 def query(func):
     """
     Decorator that runs a standard sql execution
@@ -52,14 +51,19 @@ def query(func):
         result = cursor.execute(query_string).fetchall()
         connection.close()
         return result
-    
+
     return run_query
-    
-    
+
+
 def main():
- qm = QueryMixin()
- df = qm.pandas_query("SELECT event_date, SUM(positive_events) AS positive_events, SUM(negative_events) AS negative_events FROM employee_events WHERE employee_id = {} GROUP BY event_date ORDER BY event_date;".format(2))
- print(df)
- 
- 
-if __name__ == "__main__": main()
+    qm = QueryMixin()
+    df = qm.pandas_query(
+        "SELECT event_date, SUM(positive_events) AS positive_events, SUM(negative_events) AS negative_events FROM employee_events WHERE employee_id = {} GROUP BY event_date ORDER BY event_date;".format(
+            2
+        )
+    )
+    print(df)
+
+
+if __name__ == "__main__":
+    main()
