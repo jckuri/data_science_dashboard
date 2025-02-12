@@ -314,13 +314,7 @@ from utils import load_model
 Below, we import the parent classes
 you will use for subclassing
 """
-from base_components import (
-    Dropdown,
-    BaseComponent,
-    Radio,
-    MatplotlibViz,
-    DataTable
-)
+from base_components import Dropdown, BaseComponent, Radio, MatplotlibViz, DataTable
 
 from combined_components import FormGroup, CombinedComponent
 
@@ -368,7 +362,8 @@ class Header(BaseComponent):
         # return a fasthtml H1 objects
         # containing the model's name attribute
         # YOUR CODE HERE
-        title = "Employee Performance" if model.name == 'employee' else "Team Performance"
+        title = ("Employee Performance" if model.name ==
+                 "employee" else "Team Performance")
         return H1(title)
 
 
@@ -376,12 +371,10 @@ class Header(BaseComponent):
 # called `LineChart`
 # YOUR CODE HERE
 class LineChart(MatplotlibViz):
-
     # Overwrite the parent class's `visualization`
     # method. Use the same parameters as the parent
     # YOUR CODE HERE
     def visualization(self, entity_id, model):
-
         # Pass the `asset_id` argument to
         # the model's `event_counts` method to
         # receive the x (Day) and y (event count)
@@ -395,7 +388,7 @@ class LineChart(MatplotlibViz):
         # User the pandas .set_index method to set
         # the date column as the index
         # YOUR CODE HERE
-        events_df.set_index('event_date')
+        events_df.set_index("event_date")
 
         # Sort the index
         # YOUR CODE HERE
@@ -406,9 +399,9 @@ class LineChart(MatplotlibViz):
         # YOUR CODE HERE
         # events_df = events_df.cumsum(axis = [1, 2])
         # pd.concat([df[['y0', 'y1']].cumsum(axis=1),df['y2']], axis=1)
-        sum_df = events_df[['positive_events',
-                            'negative_events']].cumsum(axis=0)
-        date_df = pandas.to_datetime(events_df['event_date'])
+        sum_df = events_df[["positive_events",
+                            "negative_events"]].cumsum(axis=0)
+        date_df = pandas.to_datetime(events_df["event_date"])
         events_df = pandas.concat([date_df, sum_df], axis=1)
 
         # Set the dataframe columns to the list
@@ -416,10 +409,12 @@ class LineChart(MatplotlibViz):
         # YOUR CODE HERE
         events_df.rename(
             columns={
-                'event_date': 'Date',
-                'positive_events': 'Positive',
-                'negative_events': 'Negative'},
-            inplace=True)
+                "event_date": "Date",
+                "positive_events": "Positive",
+                "negative_events": "Negative",
+            },
+            inplace=True,
+        )
 
         # Initialize a pandas subplot
         # and assign the figure and axis
@@ -430,8 +425,11 @@ class LineChart(MatplotlibViz):
         # call the .plot method for the
         # cumulative counts dataframe
         # YOUR CODE HERE
-        plt.plot(events_df['Date'], events_df[['Positive', 'Negative']], label=[
-                 'Positive', 'Negative'])
+        plt.plot(
+            events_df["Date"],
+            events_df[["Positive", "Negative"]],
+            label=["Positive", "Negative"],
+        )
         axis.xaxis_date()
         figure.autofmt_xdate()
 
@@ -442,10 +440,10 @@ class LineChart(MatplotlibViz):
 
         # Set title and labels for x and y axis
         # YOUR CODE HERE
-        plt.title('Positive and negative events through time', fontsize=16)
-        plt.xlabel('Time')
-        plt.ylabel('Cumulative number of events')
-        plt.legend(title='Events:')
+        plt.title("Positive and negative events through time", fontsize=16)
+        plt.xlabel("Time")
+        plt.ylabel("Cumulative number of events")
+        plt.legend(title="Events:")
 
         return figure
 
@@ -454,7 +452,6 @@ class LineChart(MatplotlibViz):
 # called `BarChart`
 # YOUR CODE HERE
 class BarChart(MatplotlibViz):
-
     # Create a `predictor` class attribute
     # assign the attribute to the output
     # of the `load_model` utils function
@@ -465,13 +462,12 @@ class BarChart(MatplotlibViz):
     # Use the same parameters as the parent
     # YOUR CODE HERE
     def visualization(self, entity_id, model):
-
         # Using the model and asset_id arguments
         # pass the `asset_id` to the `.model_data` method
         # to receive the data that can be passed to the machine
         # learning model
         # YOUR CODE HERE
-        print(f'entity_id={entity_id}')
+        print(f"entity_id={entity_id}")
         df = model.model_data(entity_id)
 
         # Using the predictor class attribute
@@ -507,8 +503,8 @@ class BarChart(MatplotlibViz):
         # Run the following code unchanged
         # axis.barh([''], [prediction])
         # axis.set_xlim(0, 1)
-        axis.set_title('Predicted Recruitment Risk', fontsize=20)
-        plt.ylabel('Probability')
+        axis.set_title("Predicted Recruitment Risk", fontsize=20)
+        plt.ylabel("Probability")
 
         # pass the axis variable
         # to the `.set_axis_styling`
@@ -517,13 +513,13 @@ class BarChart(MatplotlibViz):
 
         return figure
 
+
 # Create a subclass of combined_components/CombinedComponent
 # called Visualizations
 # YOUR CODE HERE
 
 
 class Visualizations(CombinedComponent):
-
     # Set the `children`
     # class attribute to a list
     # containing an initialized
@@ -532,7 +528,8 @@ class Visualizations(CombinedComponent):
     children = [BarChart(), LineChart()]
 
     # Leave this line unchanged
-    outer_div_type = Div(cls='grid')
+    outer_div_type = Div(cls="grid")
+
 
 # Create a subclass of base_components/DataTable
 # called `NotesTable`
@@ -552,7 +549,6 @@ class NotesTable(DataTable):
 
 
 class DashboardFilters(FormGroup):
-
     id = "top-filters"
     action = "/update_data"
     method = "POST"
@@ -560,14 +556,13 @@ class DashboardFilters(FormGroup):
     children = [
         Radio(
             values=["Employee", "Team"],
-            name='profile_type',
-            hx_get='/update_dropdown',
-            hx_target='#selector'
+            name="profile_type",
+            hx_get="/update_dropdown",
+            hx_target="#selector",
         ),
-        ReportDropdown(
-            id="selector",
-            name="user-selection")
+        ReportDropdown(id="selector", name="user-selection"),
     ]
+
 
 # Create a subclass of CombinedComponents
 # called `Report`
@@ -606,6 +601,7 @@ def home():
     # return "Hello world!"
     return report("1", Employee())
 
+
 # Create a route for a get request
 # Set the route's path to receive a request
 # for an employee ID so `/employee/2`
@@ -624,6 +620,7 @@ def employee(eid: str):
     # Return the result
     # YOUR CODE HERE
     return report(eid, Employee())
+
 
 # Create a route for a get request
 # Set the route's path to receive a request
@@ -646,25 +643,26 @@ def team(tid: str):
 
 
 # Keep the below code unchanged!
-@app.get('/update_dropdown{r}')
+@app.get("/update_dropdown{r}")
 def update_dropdown(r):
     dropdown = DashboardFilters.children[1]
-    print('PARAM', r.query_params['profile_type'])
-    if r.query_params['profile_type'] == 'Team':
+    print("PARAM", r.query_params["profile_type"])
+    if r.query_params["profile_type"] == "Team":
         return dropdown(None, Team())
-    elif r.query_params['profile_type'] == 'Employee':
+    elif r.query_params["profile_type"] == "Employee":
         return dropdown(None, Employee())
 
 
-@app.post('/update_data')
+@app.post("/update_data")
 async def update_data(r):
     from fasthtml.common import RedirectResponse
+
     data = await r.form()
-    profile_type = data._dict['profile_type']
-    id = data._dict['user-selection']
-    if profile_type == 'Employee':
+    profile_type = data._dict["profile_type"]
+    id = data._dict["user-selection"]
+    if profile_type == "Employee":
         return RedirectResponse(f"/employee/{id}", status_code=303)
-    elif profile_type == 'Team':
+    elif profile_type == "Team":
         return RedirectResponse(f"/team/{id}", status_code=303)
 
 

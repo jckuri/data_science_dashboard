@@ -109,13 +109,15 @@ def test_db_exists(db_path):
 @pytest.fixture
 def db_conn(db_path):
     from sqlite3 import connect
+
     return connect(db_path)
 
 
 @pytest.fixture
 def table_names(db_conn):
     name_tuples = db_conn.execute(
-        "SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+        "SELECT name FROM sqlite_master WHERE type='table';"
+    ).fetchall()
     return [x[0] for x in name_tuples]
 
 
@@ -128,7 +130,7 @@ def test_employee_table_exists(table_names):
     # Assert that the string 'employee'
     # is in the table_names list
     # YOUR CODE HERE
-    assert 'employee' in table_names
+    assert "employee" in table_names
 
 
 # Define a test function called
@@ -140,7 +142,7 @@ def test_team_table_exists(table_names):
     # Assert that the string 'team'
     # is in the table_names list
     # YOUR CODE HERE
-    assert 'team' in table_names
+    assert "team" in table_names
 
 
 # Define a test function called
@@ -152,11 +154,11 @@ def test_employee_events_table_exists(table_names):
     # Assert that the string 'employee_events'
     # is in the table_names list
     # YOUR CODE HERE
-    assert 'employee_events' in table_names
+    assert "employee_events" in table_names
 
 
 def main():
-    print(f'project_root={project_root}')
+    print(f"project_root={project_root}")
 
 
 if __name__ == "__main__":
